@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Windows.Threading;
 
 namespace Bigu_Petro_Lab2
 {
     class DoughnutMachine : Component
-        {
+    {
+        
         private DoughnutType mFlavor;
         public DoughnutType Flavor
         {
@@ -19,34 +21,38 @@ namespace Bigu_Petro_Lab2
                 mFlavor = value;
             }
         }
-        
-            private System.Collections.ArrayList mDoughnuts = new System.Collections.ArrayList();
-            public Doughnut this[int Index]
-            {
-                get
-                {
-                    return (Doughnut)mDoughnuts[Index];
 
-                }
-                set
-                {
-                    mDoughnuts[Index] = value;
-                }
-            }
-            public DoughnutMachine()
+        private System.Collections.ArrayList mDoughnuts = new System.Collections.ArrayList();
+        public Doughnut this[int Index]
+        {
+            get
             {
-                InitializeComponent();
+                return (Doughnut)mDoughnuts[Index];
+
             }
-        
+            set
+            {
+                mDoughnuts[Index] = value;
+            }
+        }
+        public DoughnutMachine()
+        {
+            InitializeComponent();
+        }
+
         public delegate void DoughnutCompleteDelegate();
         public event DoughnutCompleteDelegate DoughnutComplete;
+       
         DispatcherTimer doughnutTimer;
+       
         private void InitializeComponent()
         {
+
             this.doughnutTimer = new DispatcherTimer();
-            this.doughnutTimer.Tick += new System.EventHandler(this.doughnutTimer_Tick);
+            this.doughnutTimer.Tick += new System.EventHandler(this.DoughnutTimer_Tick);
         }
-        private void doughnutTimer_Tick(object sender, EventArgs e)
+    
+        private void DoughnutTimer_Tick(object sender, EventArgs e)
         {
             Doughnut aDoughnut = new Doughnut(this.Flavor);
             mDoughnuts.Add(aDoughnut);
@@ -79,56 +85,60 @@ namespace Bigu_Petro_Lab2
             }
             doughnutTimer.Start();
         }
-        public enum DoughnutType
+        
+
+       
+    }
+
+    public class Doughnut
+    {
+        private DoughnutType mFlavor;
+
+        public DoughnutType Flavor
         {
-            Glazed,
-            Sugar,
-            Lemon,
-            Chocolate,
-            Vanilla
-        }
-
-        class Doughnut
-        {
-            private DoughnutType mFlavor;
-
-            public DoughnutType Flavor
+            get
             {
-                get
-                {
-                    return mFlavor;
-                }
-                set
-                {
-                    mFlavor = value;
-                }
+                return mFlavor;
             }
-            private float mPrice = .50F;
-            public float Price
+            set
             {
-                get
-                {
-                    return mPrice;
-                }
-                set
-                {
-                    mPrice = value;
-                }
-            }
-            private readonly DateTime mTimeOfCreation;
-            public DateTime TimeOfCreation
-            {
-                get
-                {
-                    return mTimeOfCreation;
-                }
-
-            }
-            public Doughnut(DoughnutType aFlavor) // constructor
-            {
-                mTimeOfCreation = DateTime.Now;
-                mFlavor = aFlavor;
+                mFlavor = value;
             }
         }
+        private float mPrice = .50F;
+        public float Price
+        {
+            get
+            {
+                return mPrice;
+            }
+            set
+            {
+                mPrice = value;
+            }
+        }
+        private readonly DateTime mTimeOfCreation;
+        public DateTime TimeOfCreation
+        {
+            get
+            {
+                return mTimeOfCreation;
+            }
+
+        }
+        public Doughnut(DoughnutType aFlavor) // constructor
+        {
+            mTimeOfCreation = DateTime.Now;
+            mFlavor = aFlavor;
+        }
+    }
+
+    public enum DoughnutType
+    {
+        Glazed,
+        Sugar,
+        Lemon,
+        Chocolate,
+        Vanilla
     }
 }
